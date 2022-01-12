@@ -1,0 +1,51 @@
+.container {
+	padding: 100px 0;
+}
+
+.password {
+	position: relative;
+}
+
+.text-block {
+	position: absolute;
+	top: -42px;
+	left: 150px;
+	background-color: white;
+	box-shadow: 0 0 3px -2px black;
+	opacity: 0;
+	transition: all .4s ease-in-out;
+	padding: 3px 17px;
+	clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 41% 75%, 9% 91%, 14% 75%, 0% 75%);
+}
+
+.active {
+	transition: all .4s ease-in-out;
+	opacity: 1;
+
+}
+
+.color-block {
+	width: 0;
+	height: 3px;
+	margin-top: 25px;
+	transition: all .4s ease-in-out;
+}
+
+.bad {
+	width: 83.3333333333px;
+	background-color: red;
+	transition: all .4s ease-in-out;
+}
+
+.normal {
+	width: 166.6666666666px;
+	background-color: blue;
+	transition: all .4s ease-in-out;
+}
+
+.good {
+	width: 251px;
+	background-color: green;
+	transition: all .4s ease-in-out;
+}
+
