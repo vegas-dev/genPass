@@ -56,8 +56,8 @@
 //
 // });
 
-class Validation {
-	constructor(selector, params = {}) {
+/*class Validation {
+	constructor(selector) {
 		this.el = document.querySelector(selector);
 		this.box = document.querySelector('.color-block');
 
@@ -75,8 +75,36 @@ class Validation {
 			noUpper: false,
 			noLower: false,
 			noDigit: false,
-			noSpecial: false,
+			noSpecial: false
 		}, params);
+
+		this.blockColor = ['bad', 'normal', 'good'];
+
+		this.difficulty = [
+			{
+				noLower: false,
+				minLength: 3,
+				color: 'bad'
+			},
+			{
+				noUpper: false,
+				noLower: false,
+				minLength: 6,
+				minUpperCase: 1,
+				noDigit: false,
+			},
+			{
+				minLength: 6,
+				minUpperCase: 1,
+				minLowerCase: 2,
+				minDigits: 1,
+				noUpper: false,
+				noLower: false,
+				noDigit: false,
+				noSpecial: false,
+				difficulty: 3
+			}
+		];
 
 		this.run();
 	}
@@ -88,28 +116,76 @@ class Validation {
 		});
 	}
 
-	validate(){
+	validate(difficulty = 2){
+
+
 		if(this.isBadPass()) {
 			this.setBadPass();
+		}
+
+		if (this.isNormalPass()) {
+			this.setNormalPass()
+		} else {
+			this.noColorPass();
 		}
 	}
 
 	isBadPass() {
 		let inp = this.el.value,
+			upLetterLength = inp.match(this.charsets.upperCaseSet) ? inp.match(this.charsets.upperCaseSet).length : 0,
+			lowLetterLength = inp.match(this.charsets.lowerCaseSet) ? inp.match(this.charsets.lowerCaseSet).length : 0,
+			digitSetLength = inp.match(this.charsets.digitSet) ? inp.match(this.charsets.digitSet).length : 0,
 			errors = [];
 
+
 		for (const [key, value] of Object.entries(this.defaults)) {
-			if (key === 'minLength' && value > inp.length) {
+			if (key === 'minLength' && value >= inp.length) {
 				errors.push({
 					'type': 'minLength',
-					'text': 'Мало символов'
-				})
+					'text': 'Недостаточно символов'
+				});
+			}
+
+			if (key ==='minUpperCase' && upLetterLength < value) {
+				errors.push({
+					'type': 'minUpperCase',
+					'text': 'Недостаточно символов верхнего регистра'
+				});
+
+				if (upLetterLength === value) {
+					this.defaults.noUpper = true;
+				}
+			}
+
+			if (key ==='minLowerCase' && lowLetterLength < value) {
+				errors.push({
+					'type': 'minLowerCase',
+					'text': 'Недостаточно символов нижнего регистра',
+				});
+
+				if (lowLetterLength === value) {
+					this.defaults.noLower = true;
+				}
+			}
+
+			if (key ==='minDigits' && digitSetLength < value) {
+				errors.push({
+					'type': 'minDigits',
+					'text': 'Недостаточно чисел',
+				});
+
+				if (digitSetLength === value) {
+					this.defaults.noDigit = true;
+				}
+			}
+
+			if (inp === '') {
+				return false
 			}
 		}
 
 		if (errors.length) {
 			console.log(errors);
-
 			return true;
 		}
 	}
@@ -118,16 +194,70 @@ class Validation {
 		this.box.classList.add('bad');
 	}
 
-	normalPass() {
+	isNormalPass() {
+		if (this.defaults.noUpper !== true && this.defaults.noLower !== true) {
+			return true
+		}
+	}
+
+	setNormalPass() {
 		this.box.classList.add('normal');
 	}
 
 	goodPass() {
 		this.box.classList.add('good');
 	}
+
+	noColorPass() {
+		for (let item of this.blockColor) {
+			this.box.classList.remove(item);
+		}
+	}
 }
 
-new Validation('#userPassword', {
-	minLength: 5,
-	noUpper: true
+console.log(new Validation('#userPassword')).validate('light');*/
+
+class VGPasswords {
+	constructor() {
+		this.charsets = {
+			upperCaseSet: /[A-Z]/g,
+			lowerCaseSet: /[a-z]/g,
+			digitSet: /[0-9]/g,
+		};
+
+		this.difficulty = {
+			light: {
+				minLength: 3,
+				color: 'bad'
+			},
+
+			normal: {
+				minLength: 6
+			},
+
+			hard: {
+				minLength: 10
+			}
+		}
+	}
+
+	validate(difficulty = 'normal', params = {}) {
+		let _difficulty = Object.assign(this.difficulty[difficulty], params);
+
+		console.log(_difficulty)
+	}
+
+	generate() {
+		document.getElementById('generatePassword').addEventListener('click', function () {
+
+		});
+	}
+}
+
+document.getElementById('userPassword').addEventListener('keyup', function () {
+	new VGPasswords().validate('light', {
+		minLength: 1
+	});
 });
+
+new VGPasswords().generate();
