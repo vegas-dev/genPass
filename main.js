@@ -229,14 +229,12 @@ class VGPasswords {
 			light: {
 				minLength: 3,
 				minLowerCase: 2,
-				color: 'bad'
 			},
 
 			normal: {
 				minLength: 6,
 				minUpperCase: 1,
 				minLowerCase: 2,
-				color: 'normal'
 			},
 
 			hard: {
@@ -244,7 +242,6 @@ class VGPasswords {
 				minDigits: 1,
 				minUpperCase: 1,
 				minLowerCase: 2,
-				color: 'good'
 			}
 		}
 	}
@@ -265,36 +262,33 @@ class VGPasswords {
 					'type': 'minLength',
 					'text': 'Недостаточно символов'
 				});
-				colorBlock.classList.add(_difficulty.color);
-
-			} else if (lowCaseLength <= _difficulty.minLowerCase) {
+			}
+			if (lowCaseLength <= _difficulty.minLowerCase) {
 				errors.push({
 					'type': 'minLowerCase',
 					'text': 'Недостаточно букв нижнего регистра'
 				});
-
-			} else if (upCaseLength < _difficulty.minUpperCase && _difficulty.minLowerCase !== 0) {
+			}
+			if (upCaseLength < _difficulty.minUpperCase && _difficulty.minLowerCase !== 0) {
 				errors.push({
 					'type': 'minUpperCase',
 					'text': 'Недостаточно букв верхнего регистра'
 				});
-				colorBlock.classList.add('normal');
-			} else if (digitLength <= _difficulty.minDigits) {
+			}
+			if (digitLength <= _difficulty.minDigits) {
 				errors.push({
 					'type': 'minDigits',
 					'text': 'Недостаточно чисел'
 				})
-			} else {
-				errors.length = 0;
 			}
 		}
+
 		function ShowHideText() {
 			if (errors.length !== 0) {
 				textBlock.classList.add('active');
 
 				for (let i = 0; i < errors.length; i++) {
 					textBlock.innerHTML = errors[i].text;
-					console.log(errors.length)
 				}
 			}
 
@@ -302,16 +296,111 @@ class VGPasswords {
 				textBlock.classList.remove('active');
 			}
 		}
+
 		function difficultyPass() {
 			if (!difficulty) return false;
 			checkDifficultyPass();
 			ShowHideText()
 		}
 
+		function SelectsColorBlock() {
+
+			if (valueLength !== 0) {
+				switch (difficulty) {
+					case "light":
+						if (valueLength < _difficulty.minLength && lowCaseLength < _difficulty.minLowerCase) {
+							colorBlock.classList.add('bad')
+						} else {
+							colorBlock.classList.remove('bad')
+						}
+						if (valueLength >= _difficulty.minLength && lowCaseLength >= _difficulty.minLowerCase) {
+							colorBlock.classList.remove('bad');
+							colorBlock.classList.add('normal');
+						} else {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('bad');
+						}
+						if ((upCaseLength || digitLength) && (errors.length === 0) && (valueLength >= (_difficulty.minLength + 2) && lowCaseLength >= (_difficulty.minLowerCase + 2))) {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('good');
+						} else {
+							colorBlock.classList.remove('good');
+						}
+						break;
+
+					case "normal":
+						if (valueLength < _difficulty.minLength && lowCaseLength < _difficulty.minLowerCase && upCaseLength < _difficulty.minUpperCase) {
+							colorBlock.classList.add('bad')
+						} else {
+							colorBlock.classList.remove('bad')
+						}
+						if (valueLength >= _difficulty.minLength && lowCaseLength >= _difficulty.minLowerCase && upCaseLength >= _difficulty.minUpperCase) {
+							colorBlock.classList.remove('bad');
+							colorBlock.classList.add('normal');
+						} else {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('bad');
+						}
+						if ((digitLength) && (errors.length === 0) && (valueLength >= (_difficulty.minLength + 3) && lowCaseLength >= (_difficulty.minLowerCase + 3) && upCaseLength >= (_difficulty.minUpperCase + 1))) {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('good');
+						} else {
+							colorBlock.classList.remove('good');
+						}
+
+						break;
+
+					case "hard":
+						if (valueLength < _difficulty.minLength && lowCaseLength < _difficulty.minLowerCase && upCaseLength < _difficulty.minUpperCase && digitLength < _difficulty.minDigits) {
+							colorBlock.classList.add('bad')
+						} else {
+							colorBlock.classList.remove('bad')
+						}
+						if (valueLength >= _difficulty.minLength && lowCaseLength >= _difficulty.minLowerCase && upCaseLength >= _difficulty.minUpperCase) {
+							colorBlock.classList.remove('bad');
+							colorBlock.classList.add('normal');
+						} else {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('bad');
+						}
+						if ((errors.length === 0) && (valueLength >= (_difficulty.minLength + 4) && lowCaseLength >= (_difficulty.minLowerCase + 4) && upCaseLength >= (_difficulty.minUpperCase + 2) && digitLength >= (_difficulty.minDigits))) {
+							colorBlock.classList.remove('normal');
+							colorBlock.classList.add('good');
+						} else {
+							colorBlock.classList.remove('good');
+						}
+						break;
+				}
+			} else {
+				colorBlock.classList.remove('bad', 'normal', 'good');
+			}
+		}
+
 		difficultyPass();
+		SelectsColorBlock();
 	}
 
 	generate() {
+		let inputCheck = document.querySelectorAll('.input-check'),
+			self = this,
+			checkValue = [];
+		inputCheck.forEach(function (e) {
+			e.addEventListener('click', () => {
+				if (e.type === 'checkbox') {
+					if (e.checked) {
+						let n = e.value + 'Set',
+							setName = self.charsets[n];
+							checkValue.push(setName);
+					}
+				}
+				if (e.type === 'number') {
+					let lengthPass = e.value;
+					checkValue.push(lengthPass);
+				}
+			});
+			console.log(checkValue);
+		});
+
 		document.getElementById('generatePassword').addEventListener('click', function () {
 
 		});
@@ -329,7 +418,7 @@ document.getElementById('userPassword').addEventListener('keyup', function (e) {
 		difficulty = e.target.dataset.difficulty || 'normal';
 
 	new VGPasswords().validate(val, difficulty, {
-		minLength: 8
+		minLength: 5
 	});
 });
 

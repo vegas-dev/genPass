@@ -10,31 +10,46 @@
 	<title>GenPass</title>
 </head>
 <body>
-<div class="container mt-5 vg-passwords">
+<div class="container mt-5 pb-0 vg-passwords">
 	<h4 class="mb-4">Придумайте пароль</h4>
 	<div class="vg-passwords-wrapper">
 		<div class="vg-passwords-item">
+			<div class="text-block"></div>
 			<input id="userPassword" value="" data-difficulty="light" type="text" placeholder="Пароль">
-			<label for="userPassword">Пароль:</label>
+			<label for="userPassword"> <span>Пароль:</span></label>
 		</div>
 		<div class="vg-passwords-item">
 			<input id="repeatPassword" type="text" placeholder="Повторите пароль">
-			<label for="repeatPassword"> Повторите пароль: </label>
+			<label for="repeatPassword"><span>Повторите пароль:</span></label>
 		</div>
 	</div>
+	<div class="color-block"></div>
 	<div class="btn-area">
-		<button id="createPassword" class="btn btn-primary mt-4">Создать</button>
-		<button id="generatePassword" class="btn btn-primary mt-4">Сгенирировать пароль</button>
+		<button id="createPassword" class="btn btn-primary">Создать</button>
 	</div>
-	<div class="password">
-		<div class="text-block"></div>
+</div>
 
-
-		<div class="color-block"></div>
-	</div>
-
-
-
+<div class="container pt-5 vg-generate">
+	<h4>Сгенирируйте пароль</h4>
+		<ul class="list">
+			<li class="list-check">
+				<input id="check-numbers" class="input-check" type="checkbox" value="digit">
+				<label for="check-numbers">Цифры 0-9</label>
+			</li>
+			<li class="list-check">
+				<input id="check-lowCase" class="input-check" type="checkbox" value="lowerCase">
+				<label for="check-lowCase">Маленькие буквы a-z</label>
+			</li>
+			<li class="list-check">
+				<input id="check-upCase" class="input-check" type="checkbox" value="upperCase">
+				<label for="check-upCase">Большие буквы A-Z</label>
+			</li>
+			<li class="list-check">
+				<input id="passwordLength" class="input-check" type="number" min="6" max="50" placeholder="6 - 50" value="6">
+				<label for="passwordLength">Длина пароля</label>
+			</li>
+		</ul>
+	<button id="generatePassword" class="btn btn-primary">Сгенирировать пароль</button>
 </div>
 </body>
 <script src="main.js"></script>
