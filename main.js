@@ -381,28 +381,52 @@ class VGPasswords {
 	}
 
 	generate() {
-		let inputCheck = document.querySelectorAll('.input-check'),
-			self = this,
-			checkValue = [];
-		inputCheck.forEach(function (e) {
-			e.addEventListener('click', () => {
-				if (e.type === 'checkbox') {
-					if (e.checked) {
-						let n = e.value + 'Set',
-							setName = self.charsets[n];
-							checkValue.push(setName);
-					}
-				}
-				if (e.type === 'number') {
-					let lengthPass = e.value;
-					checkValue.push(lengthPass);
-				}
-			});
-			console.log(checkValue);
-		});
+		function testFunk() {
+			let password = '',
+				inputCheck = document.querySelectorAll('.input-check'),
+				inputLength = document.querySelector('.input-length').value;
+			
+		}
+
+		function generatorPass() {
+			let password = '',
+				num = document.getElementById('check-numbers').checked,
+				upCase = document.getElementById('check-upCase').checked,
+				lowCase = document.getElementById('check-lowCase').checked,
+				inputLength = +document.querySelector('.input-length').value,
+				result = document.querySelector('.result');
+
+			function generator(min = 0, max = 0) {
+				return Math.floor(Math.random() * (max + 1 - min) + min)
+			}
+			function generateRandomLowerCase() {
+				return String.fromCharCode(generator(97, 122));
+			}
+			function generateRandomUpCase() {
+				return String.fromCharCode(generator(65, 90));
+			}
+
+			if (num + upCase + lowCase <= 0) return false;
+
+			for (let i = 0; i < inputLength; i++) {
+				let r = generator(0, 2);
+				if ( r === 0) {
+					password += generateRandomLowerCase();
+				} else if ( r === 1) {
+					password += generateRandomUpCase();
+				} else if ( r === 2) {
+					password += generator(0, 9);
+				} else {
+					i--;
+			}
+				console.log(password);
+				result.textContent = password;
+			}
+		}
 
 		document.getElementById('generatePassword').addEventListener('click', function () {
-
+			// generatorPass();
+			testFunk();
 		});
 	}
 }

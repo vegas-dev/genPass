@@ -111,6 +111,14 @@ h4 {
 	border: 1px solid black;
 }
 
+/*======GENERATE======*/
+
+.vg-generate .result {
+	margin-bottom: 20px;
+	font-size: 20px;
+	color: red;
+}
+
 /*============*/
 
 .text-block {
