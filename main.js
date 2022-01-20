@@ -246,7 +246,7 @@ class VGPasswords {
 		}
 	}
 
-	validate(value, difficulty = '', params = {}) {
+	validate(value, difficulty = 'light', params = {}) {
 		let _difficulty = Object.assign(this.difficulty[difficulty], params),
 			colorBlock = document.querySelector('.color-block'),
 			textBlock = document.querySelector('.text-block'),
@@ -295,12 +295,6 @@ class VGPasswords {
 			if (errors.length === 0 || value === '') {
 				textBlock.classList.remove('active');
 			}
-		}
-
-		function difficultyPass() {
-			if (!difficulty) return false;
-			checkDifficultyPass();
-			ShowHideText()
 		}
 
 		function SelectsColorBlock() {
@@ -376,68 +370,118 @@ class VGPasswords {
 			}
 		}
 
+		function difficultyPass() {
+			if (!difficulty) return false;
+			checkDifficultyPass();
+			ShowHideText();
+			SelectsColorBlock();
+		}
+
+		function checkPassword() {
+			document.getElementById('createPassword').addEventListener('click', () => {
+				let repeatPass = document.getElementById('repeatPassword').value,
+					textBlock = document.querySelector('.text-block');
+
+				if ( value.value === repeatPass && repeatPass !== 0 && errors.length === 0) {
+					console.log('hallo')
+				} else {
+					textBlock.classList.add('active');
+					textBlock.innerText = 'Требования к паролю не выполнено';
+				}
+
+			});
+		}
+		checkPassword();
 		difficultyPass();
-		SelectsColorBlock();
+
 	}
 
 	generate() {
-		function testFunk() {
-			let password = '',
-				inputCheck = document.querySelectorAll('.input-check'),
-				inputLength = document.querySelector('.input-length').value;
-			
-		}
 
 		function generatorPass() {
-			let password = '',
-				num = document.getElementById('check-numbers').checked,
+			let num = document.getElementById('check-numbers').checked,
 				upCase = document.getElementById('check-upCase').checked,
 				lowCase = document.getElementById('check-lowCase').checked,
 				inputLength = +document.querySelector('.input-length').value,
 				result = document.querySelector('.result');
 
+			if (num + upCase + lowCase <= 0) return false;
+
 			function generator(min = 0, max = 0) {
 				return Math.floor(Math.random() * (max + 1 - min) + min)
 			}
+
 			function generateRandomLowerCase() {
 				return String.fromCharCode(generator(97, 122));
 			}
+
 			function generateRandomUpCase() {
 				return String.fromCharCode(generator(65, 90));
 			}
 
-			if (num + upCase + lowCase <= 0) return false;
+			function importantRandom() {
+				let randomValue = [];
+				for (let i = 0; i < inputLength / inputLength; i++) {
+					if (lowCase) {
+						randomValue.push(generateRandomLowerCase());
+					}
+					if (upCase) {
+						randomValue.push(generateRandomUpCase());
+					}
+					if (num) {
+						randomValue.push(generator(0, 9));
+					}
+				}
+				return randomValue;
+			}
 
-			for (let i = 0; i < inputLength; i++) {
-				let r = generator(0, 2);
-				if ( r === 0) {
-					password += generateRandomLowerCase();
-				} else if ( r === 1) {
-					password += generateRandomUpCase();
-				} else if ( r === 2) {
-					password += generator(0, 9);
-				} else {
-					i--;
+			function noImportantRandom(importantPassLength) {
+				let randomValue = [];
+				for (let i = 0; i < inputLength - importantPassLength; i++) {
+					let r = generator(0, 2);
+					if (lowCase && r === 0) {
+						randomValue.push(generateRandomLowerCase());
+					} else if (upCase && r === 1) {
+						randomValue.push(generateRandomUpCase());
+					} else if (num && r === 2) {
+						randomValue.push(generator(0, 9));
+					} else {
+						i--;
+					}
+				}
+				return randomValue;
 			}
-				console.log(password);
-				result.textContent = password;
+
+			function shuffle(array) {
+				let currentIndex = array.length, temporaryValue, randomIndex;
+
+				while (0 !== currentIndex) {
+
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex -= 1;
+
+					temporaryValue = array[currentIndex];
+					array[currentIndex] = array[randomIndex];
+					array[randomIndex] = temporaryValue;
+				}
+
+				return array;
 			}
+
+			let sImportantRandom = importantRandom();
+			let sNoImportantRandom = noImportantRandom(sImportantRandom.length);
+			result.textContent = shuffle(sImportantRandom.concat(sNoImportantRandom)).join('');
+
 		}
 
 		document.getElementById('generatePassword').addEventListener('click', function () {
-			// generatorPass();
-			testFunk();
+			generatorPass();
 		});
 	}
 }
 
-document.getElementById('userPassword').addEventListener('keyup', function (e) {
-	if (e.target.value === '') {
-		this.setAttribute('type', 'text');
-	} else {
-		this.setAttribute('type', 'password');
-	}
 
+document.getElementById('userPassword').addEventListener('keyup', function (e) {
 	let val = e.target.value,
 		difficulty = e.target.dataset.difficulty || 'normal';
 
