@@ -298,7 +298,6 @@ class VGPasswords {
 		}
 
 		function SelectsColorBlock() {
-
 			if (valueLength !== 0) {
 				switch (difficulty) {
 					case "light":
@@ -377,23 +376,42 @@ class VGPasswords {
 			SelectsColorBlock();
 		}
 
-		function checkPassword() {
-			document.getElementById('createPassword').addEventListener('click', () => {
-				let repeatPass = document.getElementById('repeatPassword').value,
-					textBlock = document.querySelector('.text-block');
-
-				if ( value.value === repeatPass && repeatPass !== 0 && errors.length === 0) {
-					console.log('hallo')
-				} else {
-					textBlock.classList.add('active');
-					textBlock.innerText = 'Требования к паролю не выполнено';
-				}
-
-			});
-		}
-		checkPassword();
 		difficultyPass();
 
+		return {
+			errors: errors,
+		}
+	}
+
+	checkPassword(difficulty, params) {
+		let value = document.getElementById('userPassword').value,
+			repeatPass = document.getElementById('repeatPassword').value,
+			textBlock = document.querySelector('.text-block');
+
+		let errors = this.validate(value, difficulty, params).errors;
+
+		if (value === repeatPass && repeatPass !== 0 && errors.length === 0) {
+			return true
+		} else {
+			textBlock.classList.add('active');
+			textBlock.innerText = 'Требования к паролю не выполнено';
+		}
+
+	}
+
+	init(el, params) {
+		let self = this;
+		let difficulty = el.dataset.difficulty || 'normal';
+
+		el.addEventListener('keyup', function (e) {
+			let val = e.target.value;
+
+			self.validate(val, difficulty, params);
+		});
+
+		document.getElementById('createPassword').addEventListener('click', () => {
+			self.checkPassword(difficulty, params);
+		});
 	}
 
 	generate() {
@@ -481,15 +499,8 @@ class VGPasswords {
 }
 
 
-document.getElementById('userPassword').addEventListener('keyup', function (e) {
-	let val = e.target.value,
-		difficulty = e.target.dataset.difficulty || 'normal';
-
-	new VGPasswords().validate(val, difficulty, {
-		minLength: 5
-	});
+new VGPasswords().init(document.getElementById('userPassword'), {
+	minLength: 5
 });
 
 new VGPasswords().generate();
-
-
