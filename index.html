@@ -12,14 +12,15 @@
 <body>
 <div class="container mt-5 pb-0 vg-passwords">
 	<h4 class="mb-4">Придумайте пароль</h4>
-	<div class="vg-passwords-wrapper">
+	<div class="vg-passwords-wrapper" data-difficulty="light" data-tip="false">
+		<p></p>
 		<div class="vg-passwords-item">
 			<div class="text-block"></div>
-			<input id="userPassword" value="" data-difficulty="light" type="text" placeholder="Пароль">
+			<input id="userPassword" value="" data-difficulty="light" type="password" placeholder="Пароль">
 			<label for="userPassword"> <span>Пароль:</span></label>
 		</div>
 		<div class="vg-passwords-item">
-			<input id="repeatPassword" type="text" placeholder="Повторите пароль">
+			<input id="repeatPassword" type="password" placeholder="Повторите пароль">
 			<label for="repeatPassword"><span>Повторите пароль:</span></label>
 		</div>
 	</div>
@@ -29,7 +30,7 @@
 	</div>
 </div>
 
-<div class="container pt-5 vg-generate">
+<div class="container pt-5 vg-generate" data-check="wordLower,digit,symbols">
 	<h4>Сгенирируйте пароль</h4>
 		<ul class="list">
 			<li class="list-check">
@@ -45,7 +46,7 @@
 				<label for="check-upCase">Большие буквы A-Z</label>
 			</li>
 			<li class="list-check">
-				<input id="passwordLength" class="input-length" type="number" min="3" max="50" placeholder="3 - 50" value="3">
+				<input id="passwordLength" class="input-length" type="number" min="6" max="50" placeholder="3 - 50" value="3">
 				<label for="passwordLength">Длина пароля</label>
 			</li>
 		</ul>

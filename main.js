@@ -415,7 +415,6 @@ class VGPasswords {
 	}
 
 	generate() {
-
 		function generatorPass() {
 			let num = document.getElementById('check-numbers').checked,
 				upCase = document.getElementById('check-upCase').checked,
@@ -439,7 +438,7 @@ class VGPasswords {
 
 			function importantRandom() {
 				let randomValue = [];
-				for (let i = 0; i < inputLength / inputLength; i++) {
+				for (let i = 0; i < 1; i++) {
 					if (lowCase) {
 						randomValue.push(generateRandomLowerCase());
 					}
@@ -471,7 +470,9 @@ class VGPasswords {
 			}
 
 			function shuffle(array) {
-				let currentIndex = array.length, temporaryValue, randomIndex;
+				let currentIndex = array.length,
+					temporaryValue,
+					randomIndex;
 
 				while (0 !== currentIndex) {
 
@@ -492,15 +493,92 @@ class VGPasswords {
 
 		}
 
-		document.getElementById('generatePassword').addEventListener('click', function () {
-			generatorPass();
-		});
+		generatorPass();
 	}
 }
+
+// class PasswordGenerator {
+// 	constructor() {
+// 		this.options = {
+// 			num: document.getElementById('check-numbers').checked,
+// 			upCase: document.getElementById('check-upCase').checked,
+// 			lowCase: document.getElementById('check-lowCase').checked,
+// 			inputLength: +document.querySelector('.input-length').value,
+// 			result: document.querySelector('.result')
+// 		}
+// 	}
+//
+// 	random(min = 0, max = 0) {
+// 		return Math.floor(Math.random() * (max + 1 - min) + min)
+// 	}
+//
+// 	getAndPushCase(array) {
+// 		if(this.options.lowCase) {
+// 			array.push(this.getRandomLowerCase())
+// 		}
+// 		if(this.options.upCase) {
+// 			array.push(this.getRandomUpCase())
+// 		}
+// 		if(this.options.num) {
+// 			array.push(this.getRandomNumber())
+// 		}
+// 	}
+//
+// 	getRandomLowerCase() {
+// 		return String.fromCharCode(this.random(97, 122));
+// 	}
+//
+// 	getRandomNumber() {
+// 		return this.random(0, 9);
+// 	}
+//
+// 	getRandomUpCase() {
+// 		return String.fromCharCode(this.random(65, 90));
+// 	}
+//
+// 	shuffle(array) {
+// 		let currentIndex = array.length;
+// 		let temporaryValue;
+// 		let randomIndex;
+//
+// 		while (0 !== currentIndex) {
+//
+// 			randomIndex = Math.floor(Math.random() * currentIndex);
+// 			currentIndex -= 1;
+//
+// 			temporaryValue = array[currentIndex];
+// 			array[currentIndex] = array[randomIndex];
+// 			array[randomIndex] = temporaryValue;
+// 		}
+//
+// 		return array;
+// 	}
+//
+// 	getRandomDefault() {
+// 		let arr = [];
+// 		this.getAndPushCase(arr);
+// 		console.log(arr);
+// 		return arr;
+//
+// 	}
+//
+// 	getPassword() {
+// 		let arr = [...this.getRandomDefault()];
+// 		this.getAndPushCase(arr);
+// 		arr.splice(-3, 3);
+// 		console.log(arr);
+// 	}
+// }
+
+
 
 
 new VGPasswords().init(document.getElementById('userPassword'), {
 	minLength: 5
 });
 
-new VGPasswords().generate();
+document.getElementById('generatePassword').addEventListener('click', function () {
+	new VGPasswords().generate();
+	// console.log(new PasswordGenerator().getPassword());
+});
+
