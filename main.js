@@ -414,163 +414,183 @@ class VGPasswords {
 		});
 	}
 
-	generate() {
-		function generatorPass() {
-			let num = document.getElementById('check-numbers').checked,
-				upCase = document.getElementById('check-upCase').checked,
-				lowCase = document.getElementById('check-lowCase').checked,
-				inputLength = +document.querySelector('.input-length').value,
-				result = document.querySelector('.result');
-
-			if (num + upCase + lowCase <= 0) return false;
-
-			function generator(min = 0, max = 0) {
-				return Math.floor(Math.random() * (max + 1 - min) + min)
-			}
-
-			function generateRandomLowerCase() {
-				return String.fromCharCode(generator(97, 122));
-			}
-
-			function generateRandomUpCase() {
-				return String.fromCharCode(generator(65, 90));
-			}
-
-			function importantRandom() {
-				let randomValue = [];
-				for (let i = 0; i < 1; i++) {
-					if (lowCase) {
-						randomValue.push(generateRandomLowerCase());
-					}
-					if (upCase) {
-						randomValue.push(generateRandomUpCase());
-					}
-					if (num) {
-						randomValue.push(generator(0, 9));
-					}
-				}
-				return randomValue;
-			}
-
-			function noImportantRandom(importantPassLength) {
-				let randomValue = [];
-				for (let i = 0; i < inputLength - importantPassLength; i++) {
-					let r = generator(0, 2);
-					if (lowCase && r === 0) {
-						randomValue.push(generateRandomLowerCase());
-					} else if (upCase && r === 1) {
-						randomValue.push(generateRandomUpCase());
-					} else if (num && r === 2) {
-						randomValue.push(generator(0, 9));
-					} else {
-						i--;
-					}
-				}
-				return randomValue;
-			}
-
-			function shuffle(array) {
-				let currentIndex = array.length,
-					temporaryValue,
-					randomIndex;
-
-				while (0 !== currentIndex) {
-
-					randomIndex = Math.floor(Math.random() * currentIndex);
-					currentIndex -= 1;
-
-					temporaryValue = array[currentIndex];
-					array[currentIndex] = array[randomIndex];
-					array[randomIndex] = temporaryValue;
-				}
-
-				return array;
-			}
-
-			let sImportantRandom = importantRandom();
-			let sNoImportantRandom = noImportantRandom(sImportantRandom.length);
-			result.textContent = shuffle(sImportantRandom.concat(sNoImportantRandom)).join('');
-
-		}
-
-		generatorPass();
-	}
+	// generate() {
+	// 	function generatorPass() {
+	// 		let num = document.getElementById('check-numbers').checked,
+	// 			upCase = document.getElementById('check-upCase').checked,
+	// 			lowCase = document.getElementById('check-lowCase').checked,
+	// 			inputLength = +document.querySelector('.input-length').value,
+	// 			result = document.querySelector('.result');
+	//
+	// 		if (num + upCase + lowCase <= 0) return false;
+	//
+	// 		function generator(min = 0, max = 0) {
+	// 			return Math.floor(Math.random() * (max + 1 - min) + min)
+	// 		}
+	//
+	// 		function generateRandomLowerCase() {
+	// 			return String.fromCharCode(generator(97, 122));
+	// 		}
+	//
+	// 		function generateRandomUpCase() {
+	// 			return String.fromCharCode(generator(65, 90));
+	// 		}
+	//
+	// 		function importantRandom() {
+	// 			let randomValue = [];
+	// 			for (let i = 0; i < 1; i++) {
+	// 				if (lowCase) {
+	// 					randomValue.push(generateRandomLowerCase());
+	// 				}
+	// 				if (upCase) {
+	// 					randomValue.push(generateRandomUpCase());
+	// 				}
+	// 				if (num) {
+	// 					randomValue.push(generator(0, 9));
+	// 				}
+	// 			}
+	// 			return randomValue;
+	// 		}
+	//
+	// 		function noImportantRandom(importantPassLength) {
+	// 			let randomValue = [];
+	// 			for (let i = 0; i < inputLength - importantPassLength; i++) {
+	// 				let r = generator(0, 2);
+	// 				if (lowCase && r === 0) {
+	// 					randomValue.push(generateRandomLowerCase());
+	// 				} else if (upCase && r === 1) {
+	// 					randomValue.push(generateRandomUpCase());
+	// 				} else if (num && r === 2) {
+	// 					randomValue.push(generator(0, 9));
+	// 				} else {
+	// 					i--;
+	// 				}
+	// 			}
+	// 			return randomValue;
+	// 		}
+	//
+	// 		function shuffle(array) {
+	// 			let currentIndex = array.length,
+	// 				temporaryValue,
+	// 				randomIndex;
+	//
+	// 			while (0 !== currentIndex) {
+	//
+	// 				randomIndex = Math.floor(Math.random() * currentIndex);
+	// 				currentIndex -= 1;
+	//
+	// 				temporaryValue = array[currentIndex];
+	// 				array[currentIndex] = array[randomIndex];
+	// 				array[randomIndex] = temporaryValue;
+	// 			}
+	//
+	// 			return array;
+	// 		}
+	//
+	// 		let sImportantRandom = importantRandom();
+	// 		let sNoImportantRandom = noImportantRandom(sImportantRandom.length);
+	// 		result.textContent = shuffle(sImportantRandom.concat(sNoImportantRandom)).join('');
+	//
+	// 	}
+	//
+	// 	generatorPass();
+	// }
 }
 
-// class PasswordGenerator {
-// 	constructor() {
-// 		this.options = {
-// 			num: document.getElementById('check-numbers').checked,
-// 			upCase: document.getElementById('check-upCase').checked,
-// 			lowCase: document.getElementById('check-lowCase').checked,
-// 			inputLength: +document.querySelector('.input-length').value,
-// 			result: document.querySelector('.result')
-// 		}
-// 	}
-//
-// 	random(min = 0, max = 0) {
-// 		return Math.floor(Math.random() * (max + 1 - min) + min)
-// 	}
-//
-// 	getAndPushCase(array) {
-// 		if(this.options.lowCase) {
-// 			array.push(this.getRandomLowerCase())
-// 		}
-// 		if(this.options.upCase) {
-// 			array.push(this.getRandomUpCase())
-// 		}
-// 		if(this.options.num) {
-// 			array.push(this.getRandomNumber())
-// 		}
-// 	}
-//
-// 	getRandomLowerCase() {
-// 		return String.fromCharCode(this.random(97, 122));
-// 	}
-//
-// 	getRandomNumber() {
-// 		return this.random(0, 9);
-// 	}
-//
-// 	getRandomUpCase() {
-// 		return String.fromCharCode(this.random(65, 90));
-// 	}
-//
-// 	shuffle(array) {
-// 		let currentIndex = array.length;
-// 		let temporaryValue;
-// 		let randomIndex;
-//
-// 		while (0 !== currentIndex) {
-//
-// 			randomIndex = Math.floor(Math.random() * currentIndex);
-// 			currentIndex -= 1;
-//
-// 			temporaryValue = array[currentIndex];
-// 			array[currentIndex] = array[randomIndex];
-// 			array[randomIndex] = temporaryValue;
-// 		}
-//
-// 		return array;
-// 	}
-//
-// 	getRandomDefault() {
-// 		let arr = [];
-// 		this.getAndPushCase(arr);
-// 		console.log(arr);
-// 		return arr;
-//
-// 	}
-//
-// 	getPassword() {
-// 		let arr = [...this.getRandomDefault()];
-// 		this.getAndPushCase(arr);
-// 		arr.splice(-3, 3);
-// 		console.log(arr);
-// 	}
-// }
+class PasswordGenerator {
+	constructor() {
+		this.options = {
+			num: {
+				item: document.getElementById('check-numbers').checked,
+				symbols: '0123456789',
+			},
+			upCase: {
+				item: document.getElementById('check-upCase').checked,
+				symbols: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+			},
+			lowCase: {
+				item: document.getElementById('check-lowCase').checked,
+				symbols: 'abcdefghijklmnopqrstuvwxyz',
+			},
+			inputLength: +document.querySelector('.input-length').value,
+			result: document.querySelector('.result')
+		}
+	}
+
+	random(min = 0, max = 0) {
+		return Math.floor(Math.random() * (max + 1 - min) + min)
+	}
+
+	shuffle(array) {
+		let currentIndex = array.length;
+		let temporaryValue;
+		let randomIndex;
+
+		while (0 !== currentIndex) {
+
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+
+		return array;
+	}
+
+	getSymbols() {
+		let symbols = [];
+		let randomSymbols = [];
+		let lowCase = this.options.lowCase.symbols;
+		let upCase = this.options.upCase.symbols;
+		let numCase = this.options.num.symbols;
+
+		if (this.options.lowCase.item + this.options.upCase.item + this.options.num.item <= 0) return false;
+
+		for (let i = 0; i < this.options.inputLength; i++) {
+			if (this.options.lowCase.item) {
+				symbols = [...symbols, ...lowCase];
+				randomSymbols.push(lowCase[this.random(0, lowCase.length - 1)]);
+			}
+			if (this.options.upCase.item) {
+				symbols = [...symbols, ...upCase];
+				randomSymbols.push(upCase[this.random(0, upCase.length - 1)]);
+
+			}
+			if (this.options.num.item) {
+				symbols = [...symbols, ...numCase];
+				randomSymbols.push(numCase[this.random(0, numCase.length - 1)]);
+			}
+		}
+
+		console.log(randomSymbols);
+		randomSymbols = randomSymbols.splice(0, this.options.inputLength);
+
+		console.log(randomSymbols);
+		/*let r1 = this.random(0 , this.options.inputLength);
+		let r2 = this.random(0 , this.options.inputLength);
+		let r3 = this.random(0 , this.options.inputLength);*/
+// Нужны специальные индексы!
+		let ind = [];
 
 
+
+		if (this.options.lowCase.item) {
+			randomSymbols[ind[0]] = lowCase[this.random(0, lowCase.length - 1)];
+		}
+		if (this.options.upCase.item) {
+			randomSymbols[ind[1]] = upCase[this.random(0, upCase.length - 1)];
+		}
+		if (this.options.num.item) {
+			randomSymbols[ind[2]] = numCase[this.random(0, numCase.length - 1)];
+		}
+
+		this.shuffle(randomSymbols);
+
+		this.options.result.textContent = randomSymbols.join('');
+	}
+}
 
 
 new VGPasswords().init(document.getElementById('userPassword'), {
@@ -578,7 +598,7 @@ new VGPasswords().init(document.getElementById('userPassword'), {
 });
 
 document.getElementById('generatePassword').addEventListener('click', function () {
-	new VGPasswords().generate();
-	// console.log(new PasswordGenerator().getPassword());
+	// new VGPasswords().generate();
+	new PasswordGenerator().getSymbols();
 });
 
