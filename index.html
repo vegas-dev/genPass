@@ -30,27 +30,28 @@
 	</div>
 </div>
 
-<div class="container pt-5 vg-generate" data-check="wordLower,digit,symbols">
+<div class="container pt-5">
 	<h4>Сгенирируйте пароль</h4>
-		<ul class="list">
+	<input type="text" class="genPassResult">
+		<ul class="list vg-generate">
 			<li class="list-check">
-				<input id="check-numbers" class="input-check" type="checkbox" value="digit">
+				<input id="check-numbers" data-set="num" type="checkbox">
 				<label for="check-numbers">Цифры 0-9</label>
 			</li>
 			<li class="list-check">
-				<input id="check-lowCase" class="input-check" type="checkbox" value="lowerCase">
+				<input id="check-lowCase" data-set="lowCase" class="input-check" type="checkbox">
 				<label for="check-lowCase">Маленькие буквы a-z</label>
 			</li>
 			<li class="list-check">
-				<input id="check-upCase" class="input-check" type="checkbox" value="upperCase">
+				<input id="check-upCase" data-set="upCase" type="checkbox">
 				<label for="check-upCase">Большие буквы A-Z</label>
 			</li>
 			<li class="list-check">
-				<input id="passwordLength" class="input-length" type="number" min="6" max="50" placeholder="3 - 50" value="3">
+				<input id="passwordLength" data-set="length" type="number" min="6" max="50" placeholder="6 - 50" value="6">
 				<label for="passwordLength">Длина пароля</label>
 			</li>
 		</ul>
-	<div class="result"></div>
+	<div class="genPassResult result"></div>
 	<button id="generatePassword" class="btn btn-primary">Сгенирировать пароль</button>
 </div>
 </body>
