@@ -602,6 +602,7 @@ class generatorPass {
 				lowCase: arg.lowCase ||  true,
 				upCase: arg.upCase || true,
 				length: arg.length || 8,
+				specialSymbol: arg.specialSymbol || true,
 			};
 
 		this.option = Object.assign(cases, this.option);
@@ -649,11 +650,23 @@ class generatorPass {
 	}
 
 	generateRandomLowerCase() {
-		return String.fromCharCode(this.generator(97, 122));
+		if(this.option.lowCase !== false) {
+			return String.fromCharCode(this.generator(97, 122));
+		}
 	}
 
 	generateRandomUpCase() {
-		return String.fromCharCode(this.generator(65, 90));
+		if(this.option.upCase !== false) {
+			return String.fromCharCode(this.generator(65, 90));
+		}
+	}
+
+	generateRandomSymbol() {
+		if(this.option.specialSymbol !== false) {
+			let symbol = '!"#$%&()*+,-./:;<=>?@[]^`{|}~';
+			let num = this.generator(0, symbol.length);
+			return symbol[num];
+		}
 	}
 
 	importantRandom() {
@@ -666,6 +679,9 @@ class generatorPass {
 			if (this.option.upCase) {
 				randomValue.push(this.generateRandomUpCase());
 			}
+			if (this.option.specialSymbol) {
+				randomValue.push(this.generateRandomSymbol());
+			}
 			if (this.option.num) {
 				randomValue.push(this.generator(0, 9));
 			}
@@ -675,18 +691,22 @@ class generatorPass {
 
 	noImportantRandom(importantPassLength) {
 		let randomValue = [];
+		console.log(importantPassLength);
 		for (let i = 0; i < this.option.length - importantPassLength; i++) {
-			let r = this.generator(0, 2);
+			let r = this.generator(0, 3);
 			if (this.option.lowCase && r === 0) {
 				randomValue.push(this.generateRandomLowerCase());
 			} else if (this.option.upCase && r === 1) {
 				randomValue.push(this.generateRandomUpCase());
-			} else if (this.option.num && r === 2) {
+			} else if(this.option.specialSymbol && r === 2) {
+				randomValue.push(this.generateRandomSymbol());
+			} else if (this.option.num && r === 3) {
 				randomValue.push(this.generator(0, 9));
 			} else {
 				i--;
 			}
 		}
+
 		return randomValue;
 	}
 
@@ -711,7 +731,7 @@ class generatorPass {
 	getResult() {
 		if (!this.isInit) return false;
 
-		if (this.option.num + this.option.upCase + this.option.lowCase <= 0) return false;
+		if (this.option.num + this.option.upCase + this.option.lowCase + this.option.specialSymbol <= 0) return false;
 
 		let sImportantRandom = this.importantRandom();
 		let sNoImportantRandom = this.noImportantRandom(sImportantRandom.length);
@@ -741,6 +761,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		num: true,
 		lowCase: true,
 		upCase: true,
+		specialSymbol: true,
 		length: 16,
 	}).getResult();
 });
